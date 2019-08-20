@@ -12,10 +12,10 @@
   <link href="https://unpkg.com/vis-timeline@5.1.0/dist/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
 
   <style>
-      html, body {
-          padding: 0;
-          margin: 0;
-      }
+    html, body {
+        padding: 0;
+        margin: 0;
+    }
   </style>
 </head>
 
@@ -30,9 +30,9 @@
         var html = document.documentElement;
         return Math.max( 
             body.scrollHeight, 
-            body.offsetHeight, 
+            body.offsetHeight,
             html.clientHeight, 
-            html.scrollHeight, 
+            html.scrollHeight,
             html.offsetHeight
         );
     }
@@ -99,6 +99,17 @@
     };
 
     var timeline = new vis.Timeline(container, items, groups, options);
+
+    window.addEventListener("orientationchange", function() {
+        // setTimeout(function() {
+        //     options.maxHeight = getMaxBodyHeight();
+        //     timeline.setOptions(options);
+        //     timeline.redraw();
+        // }, 100);
+        setTimeout(function() {
+            location.reload();
+        }, 100);
+    }, false);
   });
 </script>
 
