@@ -1,0 +1,99 @@
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Timeline | Loading screen example</title>
+  <script src="https://unpkg.com/unfetch@4.1.0/polyfill/index.js"></script>
+  <script src="https://unpkg.com/vis-timeline@5.1.0/dist/vis-timeline-graph2d.min.js"></script>
+  <link href="https://unpkg.com/vis-timeline@5.1.0/dist/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+
+  <style>
+      html, body {
+          padding: 0;
+          margin: 0;
+      }
+  </style>
+</head>
+
+<body>
+  <div id="timeline"></div>
+</body>
+
+<script>
+
+    function getMaxBodyHeight() {
+        var body = document.body;
+        var html = document.documentElement;
+        return Math.max( 
+            body.scrollHeight, 
+            body.offsetHeight, 
+            html.clientHeight, 
+            html.scrollHeight, 
+            html.offsetHeight
+        );
+    }
+  
+  fetch('./sessions.json').then(function(r) {
+      return r.json() ;
+  }).then(function(sessions) {
+    console.log(sessions);
+
+    if (!sessions || !sessions.length) {
+        console.error("Could not load sessions :-(");
+        exit();
+    }
+
+    var id = 0;
+    var items = new vis.DataSet();
+    var groups = new vis.DataSet();
+    var groupsSet = new Set();
+
+    sessions.forEach(function(session) {
+        if (session.location && !groups.get(session.location)) {
+            groups.add({
+                id: session.location,
+                content: session.location
+            });
+        }
+    });
+
+    sessions.forEach(function(session) {
+        var item = {
+            id: id++,
+            type: 'point',
+            content: session.title,
+            start: new Date(session.start)
+        };
+
+        if (session.end) {
+            item.end = session.end;
+            item.type = 'range'
+        }
+
+        if (session.location) {
+            item.group = session.location;
+        }
+
+        console.log(item);
+        items.add(item);
+    });
+
+    var container = document.getElementById('timeline');
+    var options = {
+        start: new Date(),
+        //end: new Date("2019-08-26T18:00:00"),
+        end: new Date(1000*60*60*12 + (new Date()).valueOf()),
+        verticalScroll: true, 
+        zoomKey: 'ctrlKey',
+        maxHeight: getMaxBodyHeight(),
+        loadingScreenTemplate: function() {
+            return '<h1>loading sessions...</h1>'
+        }
+    };
+
+    var timeline = new vis.Timeline(container, items, groups, options);
+  });
+</script>
+
+</html>
