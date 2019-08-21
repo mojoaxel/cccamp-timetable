@@ -50,9 +50,10 @@ function parseSessions(data) {
 
 (async () => {
     try {
-        const response = await axios.get(`${WIKI_BASE}${TIMETABLE}`);
-        const sessions = parseSessions(response.data);
-        fs.writeFileSync("sessions.json", JSON.stringify(sessions));
+        const resSessions = await axios.get(`${WIKI_BASE}${TIMETABLE}`);
+        const sessions = parseSessions(resSessions.data); 
+
+        fs.writeFileSync("sessions.json", JSON.stringify(sessions, null, 2));
     } catch(err) {
         console.error(err);
         process.exit(err);

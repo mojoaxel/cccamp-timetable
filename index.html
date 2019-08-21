@@ -5,11 +5,11 @@
 <head>
   <title>Timeline | Loading screen example</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=0.6, maximum-scale=0.6, user-scalable=0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75
+  , user-scalable=0"/>
 
-  <script src="https://unpkg.com/unfetch@4.1.0/polyfill/index.js"></script>
-  <script src="https://unpkg.com/vis-timeline@5.1.0/dist/vis-timeline-graph2d.min.js"></script>
   <link href="https://unpkg.com/vis-timeline@5.1.0/dist/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+  <link href="app.css" rel="stylesheet" type="text/css" />
 
   <style>
     html, body {
@@ -22,106 +22,17 @@
 <body>
   <div id="timeline"></div>
 </body>
-
+<script src="https://unpkg.com/moment@2.24.0/moment.js"></script>
+<script src="https://unpkg.com/unfetch@4.1.0/polyfill/index.js"></script>
+<script src="https://unpkg.com/vis-timeline@5.1.0/dist/vis-timeline-graph2d.min.js"></script>
+<script src="./app.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    Timeline.init('timeline');
+}, false);
 
-    function getMaxBodyHeight() {
-        var body = document.body;
-        var html = document.documentElement;
-        return Math.max( 
-            body.scrollHeight, 
-            body.offsetHeight,
-            html.clientHeight, 
-            html.scrollHeight,
-            html.offsetHeight
-        );
-    }
-  
-  fetch('./sessions.json').then(function(r) {
-      return r.json() ;
-  }).then(function(sessions) {
-    console.log(sessions);
-
-    if (!sessions || !sessions.length) {
-        console.error("Could not load sessions :-(");
-        exit();
-    }
-
-    var id = 0;
-    var items = new vis.DataSet();
-    var groups = new vis.DataSet();
-    var groupsSet = new Set();
-
-    sessions.forEach(function(session) {
-        if (session.location && !groups.get(session.location)) {
-            groups.add({
-                id: session.location,
-                content: session.location
-            });
-        }
-    });
-
-    sessions.forEach(function(session) {
-        var title = session.title;
-        title = (title === "Free Software Foundation Europe") ? "FSFE" : title;
-
-        var item = {
-            id: id++,
-            type: 'point',
-            content: title,
-            start: new Date(session.start)
-        };
-
-        if (session.end) {
-            item.end = session.end;
-            item.type = 'range'
-        }
-
-        if (session.location) {
-            item.group = session.location;
-        }
-
-        console.log(item);
-        items.add(item);
-    });
-
-    var container = document.getElementById('timeline');
-    var options = {
-        start: new Date(),
-        //end: new Date("2019-08-26T18:00:00"),
-        end: new Date(1000*60*60*3 + (new Date()).valueOf()),
-        min: new Date("2019-08-21T00:00:00"),
-        max: new Date("2019-08-26T00:00:00"),
-        zoomMin: 1000*60*60,
-        zoomMax: 1000*60*60*12,
-        verticalScroll: true, 
-        zoomKey: 'ctrlKey',
-        orientation: {
-            axis: 'top'
-        },
-        maxHeight: getMaxBodyHeight(),
-        loadingScreenTemplate: function() {
-            return '<h1>loading sessions...</h1>'
-        },
-        rollingMode: {
-            follow: true,
-            offset: 0.5
-        }
-    };
-
-    var timeline = new vis.Timeline(container, items, groups, options);
-
-    window.addEventListener("orientationchange", function() {
-        // setTimeout(function() {
-        //     options.maxHeight = getMaxBodyHeight();
-        //     timeline.setOptions(options);
-        //     timeline.redraw();
-        // }, 100);
-        setTimeout(function() {
-            location.reload();
-        }, 100);
-    }, false);
-  });
+window.addEventListener("orientationchange", function() {
+    Timeline.redraw();
+}, false);
 </script>
-
 </html>
