@@ -35,6 +35,9 @@ window.Timeline = {
 
     getItems: function(conference) {
         const days = conference.days;
+
+        var types = new Set();
+
         days.forEach((day) => {
             var rooms = day.rooms;
             var roomKeys = Object.keys(rooms);
@@ -65,6 +68,14 @@ window.Timeline = {
                         console.warn(`No duration found for item ${talk.guid}`);
                     }
 
+                    if (talk.type) {
+                        type = talk.type;
+                        type = type.replace(' ', '_');
+                        type = type.replace('(', '').replace(')', '');
+                        item.className = type;
+                        types.add(type);
+                    }
+
                     if (!this.items.get(item.id)) {
                         this.items.add(item);
                     } else {
@@ -74,7 +85,7 @@ window.Timeline = {
                 });
             })
         });
-
+        console.log("Types: ", types);
         return this.items;
     },
 
@@ -121,6 +132,9 @@ window.Timeline = {
             hiddenDates: [
                 {start: '2019-08-21 04:00:00', end: '2019-08-21 08:59:59', repeat: 'daily' }
             ],
+            groupOrder: function (a, b) {
+                return a.id.localeCompare(b.id);
+            },
         };
     },
 

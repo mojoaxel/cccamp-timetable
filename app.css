@@ -1,0 +1,43 @@
+.vis-background {
+    background: black;
+}
+
+.vis-time-axis .vis-text,
+.vis-labelset .vis-label {
+    color: #FFF;
+}
+
+.vis-item.lecture,
+.vis-item.Talk,
+.vis-item.talk,
+.vis-item.Short_Talk {
+    background-color: white;
+}
+
+.vis-item.DJ_Set,
+.vis-item.concert,
+.vis-item.djset,
+.vis-item.performance,
+.vis-item.Band,
+.vis-item.Entertainment,
+.vis-item.Entertainment_120 {
+    background-color: pink;
+}
+
+.vis-item.workshop,
+.vis-item.hands-on,
+.vis-item.Workshop {
+    background-color: orange;
+}
+.vis-item.discussion,
+.vis-item.meeting,
+.vis-item.outside,
+.vis-item.game {
+    background-color: red
+}
+
+.vis-item.other, 
+.vis-item.Lightning_Talk {
+    background-color: lightgray;
+}
+
