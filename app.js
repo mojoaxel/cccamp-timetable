@@ -119,7 +119,7 @@ window.Timeline = {
                 offset: 0.5
             },
             hiddenDates: [
-                {start: '2019-08-21 04:00:00', end: '2019-08-21 08:59:59', repeat: 'daily' } // daily weekly monthly yearly
+                {start: '2019-08-21 04:00:00', end: '2019-08-21 08:59:59', repeat: 'daily' }
             ],
         };
     },
@@ -129,11 +129,6 @@ window.Timeline = {
 
         this.items = new vis.DataSet();
         this.groups = new vis.DataSet();
-
-        console.log("00:30", parseDuration("00:30"));
-        console.log("01:30", parseDuration("01:30"));
-        console.log("00:90", parseDuration("00:90"));
-
 
         this.container = document.getElementById(containerId);
         this.loadData(function(conference) {
