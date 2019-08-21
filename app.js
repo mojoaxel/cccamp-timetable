@@ -1,4 +1,4 @@
-const DATA_URL = 'https://data.c3voc.de/camp2019/everything.schedule.json';
+const DATA_URL = 'https://jsonp.afeld.me/?callback=?&url=https://data.c3voc.de/camp2019/everything.schedule.json';
 //const DATA_URL = 'everything.schedule.json';
 
 function getMaxBodyHeight() {
